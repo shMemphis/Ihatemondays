@@ -50,3 +50,6 @@ def product_page(id):
 
     return result
 
+
+
+app.secret_key = conf.secret_key
