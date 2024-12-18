@@ -31,6 +31,11 @@
         <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
         <button class="btn btn-outline-success" type="submit">Search</button>
       </form>
+      {% if current_user.is_authenticated %}
+        Hello {{current_user.username }}
+        {%else%}
+        <a href="/signin" class="btn btn-outline-secondary">Login</a>
+      {%endif%}
     </div>
   </div>
 </nav>
