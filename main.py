@@ -8,8 +8,8 @@ conf = Dynaconf(
 )
 
 app.secret_key = conf.secret_key
-login_manager.init_app(app)
-login_manager.logi_view=('/signin')
+#login_manager.init_app(app)
+#login_manager.logi_view=('/signin')
 
 
 def connect_db():
@@ -120,99 +120,5 @@ def sign_up():
 def logout():
     flask_login.logout_user()
     return redirect ("/")
-@app.route('/add_to_cart/<int:product_id>')
-def add_to_cart(product_id):
-   product = next((item for item in product if item['id'] == product_id), None)
-   if product:
-       cart.append(product)
-   return redirect(url_for('view_cart'))
-@app.route('/cart')
-def view_cart():
-   total = sum(item['price'] for item in cart)
-   return render_template('cart.html', cart=cart, total=total)
-@app.route('/remove_from_cart/<int:product_id>')
-def remove_from_cart(product_id):
-   global cart
-   cart = [item for item in cart if item['id'] != product_id]
-   return redirect(url_for('view_cart'))
-@app.route('/clear_cart')
-def clear_cart():
-   global cart
-   cart = []
-   return redirect(url_for('view_cart'))
 
-@app.route('/add_to_cart/<int:product_id>')
-def add_to_cart(product_id):
-    # Connect to the database and fetch the product to add to the cart
-    connection = get_db_connection()
-    cursor = connection.cursor(dictionary=True)
-    cursor.execute('SELECT * FROM products WHERE id = %s', (product_id,))
-    product = cursor.fetchone()  # Fetch the product as a dict
-    cursor.close()
-    connection.close()
-
-    # Initialize cart if it doesn't exist
-    if 'cart' not in session:
-        session['cart'] = []
-
-    # Add product to cart
-    session['cart'].append(product)
-    session.modified = True  # Ensure the session is saved
-
-    return redirect(url_for('view_cart'))
-
-@app.route('/cart')
-def view_cart():
-    cart = session.get('cart', [])
-    total = sum(item['price'] for item in cart)  # Calculate total price
-
-    # Render the cart page with cart data and total
-    return render_template('cart.html', cart=cart, total=total)
-
-@app.route('/remove_from_cart/<int:product_id>')
-def remove_from_cart(product_id):
-    cart = session.get('cart', [])
-    
-    # Filter out the product to remove it
-    cart = [item for item in cart if item['id'] != product_id]
-    
-    # Update the cart in session
-    session['cart'] = cart
-    session.modified = True
-    
-    return redirect(url_for('view_cart'))
-
-@app.route('/clear_cart')
-def clear_cart():
-    session['cart'] = []  # Empty the cart
-    session.modified = True
-    return redirect(url_for('view_cart'))
-
-@app.route('/add_to_cart/<int:product_id>')
-def add_to_cart(product_id):
-    # Fetch the product from the database
-    connection = get_db_connection()
-    cursor = connection.cursor(dictionary=True)
-    cursor.execute('SELECT * FROM products WHERE id = %s', (product_id,))
-    product = cursor.fetchone()
-    cursor.close()
-    connection.close()
-
-    # Initialize cart if it doesn't exist
-    if 'cart' not in session:
-        session['cart'] = []
-
-    # Add product to the cart
-    session['cart'].append(product)
-    session.modified = True  # Mark session as modified to persist changes
-
-    # Redirect to the cart page
-    return redirect(url_for('view_cart'))
-@app.route('/cart')
-def view_cart():
-    cart = session.get('cart', [])
-    total = sum(item['price'] for item in cart)  # Calculate the total price
-
-    return render_template('cart.html', cart=cart, total=total)
-
-
+#@app.route('/reviews')
