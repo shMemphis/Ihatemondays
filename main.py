@@ -101,18 +101,18 @@ def sign_up():
 
         result =cursor.fetchone()
 
-    if result is None:
-        flash ("Your username/password is incorrect")
-        
-    elif password != result["password"]:
-        flash ("Your username/password is incorrect")
+        if result is None:
+            flash ("Your username/password is incorrect")
+            
+        elif password != result["password"]:
+            flash ("Your username/password is incorrect")
 
-    else:
-        user = User(result["id]"], result["username"], result["email"], result["first_name"], result["last_name"])
+        else:
+            user = User(result["id]"], result["username"], result["email"], result["first_name"], result["last_name"])
 
-        flask_login.login_user(user)
+            flask_login.login_user(user)
 
-        return redirect("/")
+            return redirect("/")
 
     return render_template ("signin.html.jinja")
 
@@ -121,4 +121,4 @@ def logout():
     flask_login.logout_user()
     return redirect ("/")
 
-#@app.route('/reviews')
+#@app.route('/review')
